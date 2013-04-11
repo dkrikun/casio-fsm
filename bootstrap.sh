@@ -14,3 +14,4 @@ apt-get update
 # git config --global core.editor vim
 # git config --global color.ui = true
 
+apt-get install -y openjdk-6-jre
