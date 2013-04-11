@@ -14,3 +14,6 @@
 
 # vim
 *.un~
+
+# vagrant
+.vagrant/
