@@ -11,22 +11,22 @@
 // State		Transition		End State		Action(s)
 Timekeep
 {
-				C				Alarm				{}
+				C				Alarm				{ showAlarm(); }
 }
 
 Alarm
 {
-				C				Countdown			{}
+				C				Countdown			{ showCountdown(); }
 }
 
 Countdown
 {
-				C				Stopwatch			{}
+				C				Stopwatch			{ showStopwatch(); }
 }
 
 Stopwatch
 {
-				C				Timekeep			{}
+				C				Timekeep			{ showTime(); }
 }
 
 Default
