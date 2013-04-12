@@ -48,7 +48,7 @@ class Input
 				continue;
 
 			char ch = readch();
-			std::cout << "ch=" << ch << std::endl;
+			// std::cout << "ch=" << ch << std::endl;
 
 			if(ch == 'q' || ch == 'Q')
 				break;
