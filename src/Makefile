@@ -1,0 +1,75 @@
+SM_SOURCES=     Watch.sm
+SOURCES=        $(SM_SOURCES:.sm=_sm.cpp) \
+                Watch.cpp \
+                Input.cpp \
+                Display.cpp \
+                main.cpp
+HEADERS=        $(SM_SOURCES:.sm=_sm.h) \
+                Watch.h \
+                Display.h \
+                Input.h
+OBJECTS=        $(SOURCES:.cpp=.o)
+TARGET=         casio-fsm
+
+# Uncomment to turn off IOStreams for debug.
+# NO_STREAMS=     -nostreams
+
+# Uncomment to turn on debug message generation.
+TRACE=          -g1 $(NO_STREAMS)
+
+# Uncomment to turn on serialization.
+# SERIAL=         -serial
+
+# Uncomment to turn off try/catch/rethrow generation.
+# NO_CATCH=       -nocatch
+
+# Uncomment to turn off exception throws.
+# NO_EXCEPT=      -noex
+
+SMC_ROOT=       ../foreign/smc_6_1_0
+SMC=            java -jar $(SMC_ROOT)/bin/Smc.jar
+SMC_FLAGS=      -c++ $(TRACE) $(SERIAL) $(NO_CATCH) $(NO_EXCEPT)
+
+CXX=            c++
+CPPFLAGS=       -g -Wall -Wextra -I. -I$(SMC_ROOT)/lib/C++ -lcurses
+
+RM_F=           rm -f
+
+#################################################################
+# Rules.
+#
+
+%_sm.h %_sm.cpp : %.sm
+		$(SMC) $(SMC_FLAGS) $<
+
+%_sm.dot :      %.sm
+		$(SMC) -graph -glevel 1 $<
+
+%_sm.png :      %_sm.dot
+		dot -T png -o $@ $<
+
+%_sm.html :     %.sm
+		$(SMC) -table $<
+
+all :           $(TARGET)
+
+$(TARGET) :     $(HEADERS) $(SOURCES)
+		$(CXX) $(CPPFLAGS) -o $@ $(SOURCES)
+
+test :          $(TARGET)
+
+graph :         $(SM_SOURCES:%.sm=%_sm.dot)
+
+png :           $(SM_SOURCES:%.sm=%_sm.png)
+
+table :         $(SM_SOURCES:%.sm=%_sm.html)
+
+clean :
+		-$(RM_F) $(TARGET)
+		-$(RM_F) $(OBJECTS)
+		-$(RM_F) *_sm.h
+		-$(RM_F) *_sm.cpp
+		-$(RM_F) *_sm.dot
+		-$(RM_F) *_sm.png
+		-$(RM_F) *_sm.html
+

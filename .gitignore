@@ -18,3 +18,10 @@
 
 # vagrant
 .vagrant/
+
+
+# target
+casio-fsm
+
+# smc
+*_sm.*

@@ -1,0 +1,37 @@
+%{
+%}
+
+%class Watch
+%header Watch.h
+
+%start WatchFsm::Timekeep
+%map WatchFsm
+
+%%
+// State		Transition		End State		Action(s)
+Timekeep
+{
+				C				Alarm				{}
+}
+
+Alarm
+{
+				C				Countdown			{}
+}
+
+Countdown
+{
+				C				Stopwatch			{}
+}
+
+Stopwatch
+{
+				C				Timekeep			{}
+}
+
+Default
+{
+				Default			nil					{}
+}
+
+%%
