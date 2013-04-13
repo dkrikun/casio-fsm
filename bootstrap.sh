@@ -16,3 +16,4 @@ apt-get update
 
 apt-get install -y openjdk-6-jre
 apt-get install -y graphviz
+apt-get install -y libncurses5

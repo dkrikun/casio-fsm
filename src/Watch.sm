@@ -12,21 +12,25 @@
 Timekeep
 {
 				C				Alarm				{ showAlarm(); }
+				Tick			nil					{ incTime(); }
 }
 
 Alarm
 {
 				C				Countdown			{ showCountdown(); }
+				Tick			nil					{ incTime(); }
 }
 
 Countdown
 {
 				C				Stopwatch			{ showStopwatch(); }
+				Tick			nil					{ incTime(); }
 }
 
 Stopwatch
 {
 				C				Timekeep			{ showTime(); }
+				Tick			nil					{ incTime(); }
 }
 
 Default

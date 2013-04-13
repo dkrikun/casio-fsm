@@ -1,12 +1,94 @@
 #include <Input.h>
 
+#include <stdio.h>
+#include <termios.h>
+#include <term.h>
+#include <curses.h>
+#include <unistd.h>
+
+
+namespace
+{
+
+void init_keyboard();
+void close_keyboard();
+int kbhit();
+int readch();
+
+}
+
+Input::Input(Watch* watch)
+	: watch_(watch)
+	, shouldStop_(false)
+{
+	init_keyboard();
+}
+
+Input::~Input()
+{
+	close_keyboard();
+}
+
+void Input::frame()
+{
+	if(!kbhit())
+		return;
+
+	char ch = readch();
+	// std::cout << "ch=" << ch << std::endl;
+
+	if(ch == 'q' || ch == 'Q')
+	{
+		shouldStop_ = true;
+		return;
+	}
+
+	if(ch == 'u' || ch == 'U')
+	{
+		displayUsage();
+		return;
+	}
+
+	if(ch == 'a' || ch == 'A')
+	{
+		watch_->aPressed();
+		return;
+	}
+
+	if(ch == 'b' || ch == 'B')
+	{
+		watch_->bPressed();
+		return;
+	}	
+
+	if(ch == 'c' || ch == 'C')
+	{
+		watch_->cPressed();
+		return;
+	}
+
+	if(ch == 'd' || ch == 'D')
+	{
+		watch_->dPressed();
+		return;
+	}	
+
+	if(ch == 'l' || ch == 'L')
+	{
+		watch_->lightPressed();
+		return;
+	}
+
+	
+	std::cout << "not recognized input: " << ch << "\n";
+	displayUsage();
+}
+
 namespace
 {
 
 struct termios initial_settings, new_settings;
 int peek_character = -1;
-
-}
 
 void init_keyboard()
 {
@@ -56,4 +138,6 @@ int readch()
     }
     read(0,&ch,1);
     return ch;
+}
+
 }
