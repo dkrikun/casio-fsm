@@ -22,8 +22,8 @@ vagrant up
 This will download the basic VM and configure it, so go have a coffee break :smile:
 The process will start VM, and then install some packages (java, g++, make etc.) for development.
 When this is ready you can either use VirtualBox UI or connect via ssh client to the VM:
- * UI: log in with username: vagrant, password: vagrant
- * ssh client: on Linux/Git Bash use `vagrant ssh`, otherwise use some other ssh client like PuTTY to connect manually
+ * **VirtualBox UI**: log in with username: vagrant, password: vagrant
+ * **ssh client**: on Linux/Git Bash use `vagrant ssh`, otherwise use some other ssh client like PuTTY to connect manually
 
 After that, `cd /vagrant` to go to the repository root folder, which is shared between the host and the VM.
 Finally, `make clean; make` to build, `./casio-fsm` to run.
