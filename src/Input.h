@@ -24,11 +24,13 @@ class Input
 
 
 	void frame();
+# if 0
 	void run()
 	{
 		while(!shouldStop())
 			frame();
 	}
+# endif
 
 	bool shouldStop() const
 	{ return shouldStop_; }

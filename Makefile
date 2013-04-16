@@ -4,11 +4,13 @@ SOURCES=        $(SM_SOURCES:.sm=_sm.cpp) \
                 src/Input.cpp \
                 src/Display.cpp \
                 src/Time.cpp \
+                src/Sched.cpp \
                 src/main.cpp
 HEADERS=        $(SM_SOURCES:.sm=_sm.h) \
                 src/Watch.h \
                 src/Display.h \
                 src/Time.h \
+                src/Sched.h \
                 src/Input.h
 OBJECTS=        $(SOURCES:.cpp=.o)
 TARGET=         casio-fsm

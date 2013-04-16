@@ -2,7 +2,7 @@
 #include <Display.h>
 #include <Watch.h>
 #include <Input.h>
-#include <unistd.h>
+#include <Sched.h>
 
 
 int main(int, char**)
@@ -12,15 +12,8 @@ int main(int, char**)
 	Watch w(&d);
 	Input i(&w);
 
-	while(true)
-	{
-		sleep(1);
-		i.frame();
-		if(i.shouldStop())
-			break;
-		w.frame();
-		d.frame();
-	}
+	Sched sched(&i, &w, &d);
+	sched.run();
 
 	return 0;
 }
