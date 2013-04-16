@@ -73,9 +73,9 @@ void Input::frame()
 		return;
 	}	
 
-	if(ch == 'l' || ch == 'L')
+	if(ch == 'e' || ch == 'E')
 	{
-		watch_->lightPressed();
+		watch_->ePressed();
 		return;
 	}
 

@@ -24,7 +24,7 @@ class Watch
 	void bPressed() { /*fsm_->B();*/ }
 	void cPressed() { fsm_.C(); }
 	void dPressed() { /*fsm_->D();*/ }
-	void lightPressed() { /*fsm_->Light();*/ }
+	void ePressed() { /*fsm_->E();*/ }
 
 	void frame()
 	{
