@@ -29,6 +29,15 @@ Input::~Input()
 	close_keyboard();
 }
 
+
+void Input::displayUsage() const
+{
+	std::cout << "usage: a,b,c,d,e - buttons labeled A,B,C,D,E\n"
+		<< "\tu - display this message\n"
+		<< "\tq - quit application"
+		<< std::endl;
+}
+
 void Input::frame()
 {
 	if(!kbhit())
