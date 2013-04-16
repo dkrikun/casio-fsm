@@ -1,15 +1,15 @@
-SM_SOURCES=     Watch.sm
+SM_SOURCES=     src/Watch.sm
 SOURCES=        $(SM_SOURCES:.sm=_sm.cpp) \
-                Watch.cpp \
-                Input.cpp \
-                Display.cpp \
-                Time.cpp \
-                main.cpp
+                src/Watch.cpp \
+                src/Input.cpp \
+                src/Display.cpp \
+                src/Time.cpp \
+                src/main.cpp
 HEADERS=        $(SM_SOURCES:.sm=_sm.h) \
-                Watch.h \
-                Display.h \
-                Time.h \
-                Input.h
+                src/Watch.h \
+                src/Display.h \
+                src/Time.h \
+                src/Input.h
 OBJECTS=        $(SOURCES:.cpp=.o)
 TARGET=         casio-fsm
 
@@ -28,12 +28,12 @@ TRACE=          -g1 $(NO_STREAMS)
 # Uncomment to turn off exception throws.
 # NO_EXCEPT=      -noex
 
-SMC_ROOT=       ../foreign/smc_6_1_0
+SMC_ROOT=       foreign/smc_6_1_0
 SMC=            java -jar $(SMC_ROOT)/bin/Smc.jar
 SMC_FLAGS=      -c++ $(TRACE) $(SERIAL) $(NO_CATCH) $(NO_EXCEPT)
 
 CXX=            c++
-CPPFLAGS=       -g -Wall -Wextra -I. -I$(SMC_ROOT)/lib/C++ -lcurses
+CPPFLAGS=       -g -Wall -Wextra -Isrc -I$(SMC_ROOT)/lib/C++ -lcurses
 
 RM_F=           rm -f
 
