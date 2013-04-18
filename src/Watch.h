@@ -12,7 +12,9 @@ class Watch
 	Watch(Display* display)
 		: display_(display)
 		, fsm_(*this)
-	{}
+	{
+		fsm_.setDebugFlag(true);
+	}
 
 	private:
 	Display* display_;

@@ -19,7 +19,7 @@ TARGET=         casio-fsm
 # NO_STREAMS=     -nostreams
 
 # Uncomment to turn on debug message generation.
-TRACE=          -g1 $(NO_STREAMS)
+TRACE=          -g $(NO_STREAMS)
 
 # Uncomment to turn on serialization.
 # SERIAL=         -serial
