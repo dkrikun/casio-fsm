@@ -5,37 +5,96 @@
 %header Watch.h
 
 %start WatchFsm::Timekeep
-%map WatchFsm
 
+%map WatchFsm
 %%
 // State		Transition		End State		Action(s)
 Timekeep
 {
 				C				Alarm				{ showAlarm(); }
-				Tick			nil					{ incTime(); }
+				A				push(TimeSet::Seconds)	{}
 }
 
 Alarm
 {
 				C				Countdown			{ showCountdown(); }
-				Tick			nil					{ incTime(); }
 }
 
 Countdown
 {
 				C				Stopwatch			{ showStopwatch(); }
-				Tick			nil					{ incTime(); }
 }
 
 Stopwatch
 {
 				C				Timekeep			{ showTime(); }
-				Tick			nil					{ incTime(); }
 }
 
 Default
 {
-				Default			nil					{}
+	Tick		nil		{ incTime(); }
+	Default		nil		{}
+}
+%%
+
+
+%map TimeSet
+%%
+
+// defaults, taken from any state in TimeSet
+Default
+{
+	A		pop()	{}					// return to timekeeping mode
+	D		nil		{ invert24Pm(); }	// invert 24/AM-PM mode
+	B		nil		{}
+	Tick	nil		{ incTime(); }
 }
 
+// C button circularly switches current value to set
+// Seconds -> Hour -> Minutes -> Year -> Month -> Day
+// and then return Day -> Seconds
+//
+// E button changes current value: for all but seconds, the value is
+// incremented, the seconds are reset to 0 and minutes are rounded
+// TODO long pressed E makes changes at high speed
+// TODO if there is no button pressed for a few minutes - go to timekeeping
+
+Seconds
+{
+	C							Hour {}
+
+	E[ctxt.seconds() < 30]		nil
+		{ resetSeconds(); }
+
+	E[ctxt.seconds() >=30]		nil
+	{
+		resetSeconds();
+		incMinutes();
+	}
+}
+Hour
+{
+				C				Minutes				{}
+				E				nil					{ incHour(); }
+}
+Minutes
+{
+				C				Year				{}
+				E				nil					{ incMinutes(); }
+}
+Year
+{
+				C				Month				{}
+				E				nil					{ incYear(); }
+}
+Month
+{
+				C				Day					{}
+				E				nil					{ incMonth(); }
+}
+Day
+{
+				C				Hour				{}
+				E				nil					{ incDay(); }
+}
 %%

@@ -22,11 +22,11 @@ class Watch
 	Time time_;
 
 	public:
-	void aPressed() { /*fsm_->A();*/ }
-	void bPressed() { /*fsm_->B();*/ }
+	void aPressed() { fsm_.A(); }
+	void bPressed() { fsm_.B(); }
 	void cPressed() { fsm_.C(); }
-	void dPressed() { /*fsm_->D();*/ }
-	void ePressed() { /*fsm_->E();*/ }
+	void dPressed() { fsm_.D(); }
+	void ePressed() { fsm_.E(); }
 
 	void frame()
 	{
@@ -40,6 +40,17 @@ class Watch
 	void showCountdown() { display_->showCountdown(); }
 	void showStopwatch() { display_->showStopwatch(); }
 	void incTime()	{ time_.inc(); }
+
+	void resetSeconds() { time_.setSeconds(0); }
+	int seconds() const { return time_.seconds(); }
+
+	void incMinutes() { time_.setMinutes(time_.minutes() + 1); }
+	void incHour() { time_.setHour(time_.hour() + 1); }
+	void incYear() { time_.setYear(time_.year() + 1); }
+	void incMonth() { time_.setMonth(time_.month() + 1); }
+	void incDay() { time_.setMonthday(time_.monthday() + 1); }
+	
+	void invert24Pm() {};	//TODO
 
 };
 
