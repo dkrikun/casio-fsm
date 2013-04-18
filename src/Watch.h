@@ -32,6 +32,7 @@ class Watch
 	{
 		fsm_.Tick();
 		display_->setTime(time_);
+		display_->frame();
 	}
 
 	public:

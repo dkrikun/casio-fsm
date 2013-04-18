@@ -33,6 +33,7 @@ Input::~Input()
 void Input::displayUsage() const
 {
 	std::cout << "usage: a,b,c,d,e - buttons labeled A,B,C,D,E\n"
+		<< "\tspace - simulate next step\n"
 		<< "\tu - display this message\n"
 		<< "\tq - quit application"
 		<< std::endl;
@@ -85,6 +86,12 @@ void Input::frame()
 	if(ch == 'e' || ch == 'E')
 	{
 		watch_->ePressed();
+		return;
+	}
+
+	if(ch == ' ')
+	{
+		watch_->frame();
 		return;
 	}
 

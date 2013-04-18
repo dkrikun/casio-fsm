@@ -23,8 +23,8 @@ class Sched
 		{
 			sleep(1);
 			input_->frame();
-			watch_->frame();
-			display_->frame();
+		 // watch_->frame();
+		 // display_->frame();
 		}
 	}
 
