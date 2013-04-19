@@ -15,6 +15,8 @@ class Display
 	{}
 
 	public:
+	void clearScreen() { std::cout << "\x1B[2J\x1B[H"; }
+
 	void showTime() { mode_ = TIME; };
 	void showAlarm() { mode_ = ALARM; };
 	void showCountdown() { mode_ = COUNTDOWN; };

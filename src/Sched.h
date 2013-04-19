@@ -27,7 +27,7 @@ class Sched
 			// clear screen, normally this should be done in Display
 			// but we want to fsm debug output to be shown (and not wiped away by this
 			// clear screen)
-			std::cout << "\x1B[2J\x1B[H";
+			display_->clearScreen();
 			input_->frame();
 		 // watch_->frame();
 		 // display_->frame();
