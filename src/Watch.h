@@ -9,11 +9,11 @@
 class Watch
 {
 	public:
-	Watch(Display* display)
+	Watch(Display* display, bool isDebugFsm)
 		: display_(display)
 		, fsm_(*this)
 	{
-		fsm_.setDebugFlag(true);
+		fsm_.setDebugFlag(isDebugFsm);
 	}
 
 	private:
