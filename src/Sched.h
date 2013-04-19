@@ -20,17 +20,26 @@ class Sched
 	public:
 	void run()
 	{
+		unsigned int period_counter = 0;
 		while(!shouldStop())
 		{
-			sleep(1);
+			const unsigned int period_usec = 333333;
+			usleep(period_usec);
 
 			// clear screen, normally this should be done in Display
 			// but we want to fsm debug output to be shown (and not wiped away by this
 			// clear screen)
 			display_->clearScreen();
+
+			// check input each 33.3 msec
 			input_->frame();
-		 // watch_->frame();
-		 // display_->frame();
+
+			// tick the clock once per sec
+			if(period_counter++ == 2)
+			{
+				watch_->frame();
+				period_counter = 0;
+			}
 		}
 	}
 

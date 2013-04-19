@@ -89,12 +89,6 @@ void Input::frame()
 		return;
 	}
 
-	if(ch == ' ')
-	{
-		watch_->frame();
-		return;
-	}
-
 	
 	std::cout << "not recognized input: " << ch << "\n";
 	displayUsage();
