@@ -35,7 +35,9 @@ SMC=            java -jar $(SMC_ROOT)/bin/Smc.jar
 SMC_FLAGS=      -c++ $(TRACE) $(SERIAL) $(NO_CATCH) $(NO_EXCEPT)
 
 CXX=            c++
-CPPFLAGS=       -g -Wall -Wextra -Isrc -I$(SMC_ROOT)/lib/C++ -lcurses
+INCLUDE_DIRS=   -Isrc -I$(SMC_ROOT)/lib/C++
+LIBS=           -lboost_program_options -lcurses
+CPPFLAGS=       -g -Wall -Wextra $(INCLUDE_DIRS)
 
 RM_F=           rm -f
 
@@ -58,7 +60,7 @@ RM_F=           rm -f
 all :           $(TARGET)
 
 $(TARGET) :     $(HEADERS) $(SOURCES)
-		$(CXX) $(CPPFLAGS) -o $@ $(SOURCES)
+		$(CXX) $(CPPFLAGS) -o $@ $(SOURCES) $(LIB_DIRS) $(LIBS)
 
 test :          $(TARGET)
 
