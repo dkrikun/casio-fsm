@@ -14,4 +14,5 @@ apt-get update
 # git config --global core.editor vim
 # git config --global color.ui = true
 
-apt-get install -y openjdk-6-jre graphviz libncurses5 libncurses5-dev make g++
+apt-get install -y openjdk-6-jre graphviz libncurses5 libncurses5-dev make g++ \
+	libboost-program-options1.48.0 libboost-program-options1.48-dev
