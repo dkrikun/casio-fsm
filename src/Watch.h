@@ -38,8 +38,11 @@ class Watch
 		chr::steady_clock::time_point now = chr::steady_clock::now();
 		if(now - last_tick_ >= chr::seconds(1))
 		{
+			size_t num_cycles = (now - last_tick_)/chr::seconds(1);
+
 			last_tick_ = now;
-			fsm_.Tick();
+			for(; num_cycles > 0; --num_cycles)
+				fsm_.Tick();
 		}
 
 		display_->setTime(time_);
