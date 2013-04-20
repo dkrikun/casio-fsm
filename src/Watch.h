@@ -35,6 +35,9 @@ class Watch
 
 	void frame()
 	{
+		// invoke fsm_.Tick() for each second passed since last frame()
+		// this is in order to compensate for Sched's too slow clock, just in
+		// case it *might* be
 		chr::steady_clock::time_point now = chr::steady_clock::now();
 		if(now - last_tick_ >= chr::seconds(1))
 		{
