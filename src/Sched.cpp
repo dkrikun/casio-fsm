@@ -11,7 +11,6 @@ Sched::Sched(Input* input, Watch* watch, Display* display)
 
 void Sched::run()
 {
-	unsigned int period_counter = 0;
 	while(!shouldStop())
 	{
 		const unsigned int period_usec = 333333;
@@ -22,14 +21,7 @@ void Sched::run()
 		// clear screen)
 		display_->clearScreen();
 
-		// check input each 33.3 msec
 		input_->frame();
-
-		// tick the clock once per sec
-		if(period_counter++ == 2)
-		{
-			watch_->frame();
-			period_counter = 0;
-		}
+		watch_->frame();
 	}
 }

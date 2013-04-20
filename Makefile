@@ -36,7 +36,7 @@ SMC_FLAGS=      -c++ $(TRACE) $(SERIAL) $(NO_CATCH) $(NO_EXCEPT)
 
 CXX=            c++
 INCLUDE_DIRS=   -Isrc -I$(SMC_ROOT)/lib/C++
-LIBS=           -lboost_program_options -lcurses
+LIBS=           -lboost_chrono -lboost_program_options -lboost_system -lcurses
 CPPFLAGS=       -g -Wall -Wextra $(INCLUDE_DIRS)
 
 RM_F=           rm -f

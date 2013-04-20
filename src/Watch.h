@@ -5,6 +5,9 @@
 #include <Display.h>
 #include <Time.h>
 
+#include <boost/chrono/chrono.hpp>
+namespace chr = boost::chrono;
+
 
 class Watch
 {
@@ -12,6 +15,7 @@ class Watch
 	Watch(Display* display, bool isDebugFsm)
 		: display_(display)
 		, fsm_(*this)
+		, last_tick_(chr::steady_clock::now())
 	{
 		fsm_.setDebugFlag(isDebugFsm);
 	}
@@ -20,6 +24,7 @@ class Watch
 	Display* display_;
 	WatchContext fsm_;
 	Time time_;
+	chr::steady_clock::time_point last_tick_;
 
 	public:
 	void aPressed() { fsm_.A(); }
@@ -30,7 +35,13 @@ class Watch
 
 	void frame()
 	{
-		fsm_.Tick();
+		chr::steady_clock::time_point now = chr::steady_clock::now();
+		if(now - last_tick_ >= chr::seconds(1))
+		{
+			last_tick_ = now;
+			fsm_.Tick();
+		}
+
 		display_->setTime(time_);
 		display_->frame();
 	}
