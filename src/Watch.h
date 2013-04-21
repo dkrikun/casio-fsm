@@ -12,17 +12,12 @@ namespace chr = boost::chrono;
 class Watch
 {
 	public:
-	Watch(Display* display, bool isDebugFsm)
-		: display_(display)
-		, fsm_(*this)
-		, last_tick_(chr::steady_clock::now())
-	{
-		fsm_.setDebugFlag(isDebugFsm);
-	}
+	Watch(Display* display, bool isDebugFsm);
 
 	private:
 	Display* display_;
 	WatchContext fsm_;
+
 	Time time_;
 	chr::steady_clock::time_point last_tick_;
 
@@ -33,24 +28,7 @@ class Watch
 	void dPressed() { fsm_.D(); }
 	void ePressed() { fsm_.E(); }
 
-	void frame()
-	{
-		// invoke fsm_.Tick() for each second passed since last frame()
-		// this is in order to compensate for Sched's too slow clock, just in
-		// case it *might* be
-		chr::steady_clock::time_point now = chr::steady_clock::now();
-		if(now - last_tick_ >= chr::seconds(1))
-		{
-			size_t num_cycles = (now - last_tick_)/chr::seconds(1);
-
-			last_tick_ = now;
-			for(; num_cycles > 0; --num_cycles)
-				fsm_.Tick();
-		}
-
-		display_->setTime(time_);
-		display_->frame();
-	}
+	void frame();
 
 	public:
 	void showTime() { display_->showTime(); }
