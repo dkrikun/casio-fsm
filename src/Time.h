@@ -35,6 +35,42 @@ struct Time
 	{ year_ = value; checkInvariant(); }
 
 
+	void incMinutes()
+	{
+		if(++min_ == 60)
+			min_ = 0;
+	}
+
+	void incHour()
+	{
+		if(++hour_ == 24)
+			hour_ = 0;
+	}
+
+	void incMonth()
+	{
+		if(++month_ == 12)
+			month_ = 0;
+	}
+
+	void incDay()
+	{
+		if(++monthday_ == maxMonthday())
+			monthday_ = 0;
+
+		if(++weekday_ == 7)
+			weekday_ = 0;
+	}
+		
+
+	void incYear()
+	{
+		if(year_ == 2099)
+			return;
+		++year_;
+	}
+
+
 	int seconds() const { return sec_; }
 	int minutes() const { return min_; }
 	int hour() const { return hour_; }
@@ -61,6 +97,8 @@ struct Time
 	{
 		return (!year_ % 4 && year_ % 100) || (!year_ % 400);
 	}
+
+	int maxMonthday() const;
 };
 
 

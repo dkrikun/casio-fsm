@@ -25,10 +25,7 @@ void Time::inc()
 	if(weekday_==7)
 		weekday_=0;
 
-	const int max_monthday = month_ == 1? (isLeapYear()? 28 : 29)
-		: ((month_ == 0 || month_ == 2 || month_ == 4 || month_ == 6
-			|| month_ == 7 || month_ == 9 || month_ == 11)? 31 : 30);
-	if(monthday_ < max_monthday)
+	if(monthday_ < maxMonthday())
 		return;
 
 	monthday_ = 0; ++month_;
@@ -40,6 +37,13 @@ void Time::inc()
 
 
 	checkInvariant();
+}
+
+int Time::maxMonthday() const
+{
+	return month_ == 1? (isLeapYear()? 28 : 29)
+		: ((month_ == 0 || month_ == 2 || month_ == 4 || month_ == 6
+			|| month_ == 7 || month_ == 9 || month_ == 11)? 31 : 30);
 }
 
 

@@ -40,11 +40,11 @@ class Watch
 	void resetSeconds() { time_.setSeconds(0); }
 	int seconds() const { return time_.seconds(); }
 
-	void incMinutes() { time_.setMinutes(time_.minutes() + 1); }
-	void incHour() { time_.setHour(time_.hour() + 1); }
-	void incYear() { time_.setYear(time_.year() + 1); }
-	void incMonth() { time_.setMonth(time_.month() + 1); }
-	void incDay() { time_.setMonthday(time_.monthday() + 1); }
+	void incMinutes() { time_.incMinutes(); }
+	void incHour() { time_.incHour(); }
+	void incYear() { time_.incYear(); }
+	void incMonth() { time_.incMonth(); }
+	void incDay() { time_.incDay(); }
 	
 	void invert24Pm() {};	//TODO
 
