@@ -1,5 +1,4 @@
 
-#include <Display.h>
 #include <Watch.h>
 #include <Input.h>
 #include <Sched.h>
@@ -26,11 +25,10 @@ int main(int argc, char** argv)
 
 	const bool isDebugFsm = vm.count("debug");
 
-	Display d;
-	Watch w(&d, isDebugFsm);
+	Watch w(isDebugFsm);
 	Input i(&w);
 
-	Sched sched(&i, &w, &d);
+	Sched sched(&i, &w);
 	sched.run();
 
 	return 0;

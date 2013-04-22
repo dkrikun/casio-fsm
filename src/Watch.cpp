@@ -1,15 +1,17 @@
 #include <Watch.h>
 
-Watch::Watch(Display* display, bool isDebugFsm)
-	: display_(display)
-	, fsm_(*this)
+Watch::Watch(bool isDebugFsm)
+	: fsm_(*this)
 	, last_tick_(chr::steady_clock::now())
+	, mode_(TIME)
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
 
 void Watch::frame()
 {
+	clearScreen();
+
 	// invoke fsm_.Tick() for each second passed since last frame()
 	// this is in order to compensate for Sched's too slow clock, just in
 	// case it *might* be
@@ -23,7 +25,16 @@ void Watch::frame()
 			fsm_.Tick();
 	}
 
-	display_->setTime(time_);
-	display_->frame();
+	display();
 }
 
+void Watch::display() const
+{
+	switch(mode_)
+	{
+		case TIME: std::cout << time_.asString() << std::endl; return;
+		case ALARM: std::cout << "ALARM" << std::endl; return;
+		case COUNTDOWN: std::cout << "COUNTDOWN" << std::endl; return;
+		case STOPWATCH: std::cout << "STOPWATCH" << std::endl; return;
+	}
+}

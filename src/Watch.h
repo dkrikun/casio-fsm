@@ -2,7 +2,6 @@
 #define WATCH_H
 
 #include <Watch_sm.h>
-#include <Display.h>
 #include <Time.h>
 
 #include <boost/chrono/chrono.hpp>
@@ -12,14 +11,15 @@ namespace chr = boost::chrono;
 class Watch
 {
 	public:
-	Watch(Display* display, bool isDebugFsm);
+	Watch(bool isDebugFsm);
+	enum Mode { TIME = 0, ALARM, COUNTDOWN, STOPWATCH };
 
 	private:
-	Display* display_;
 	WatchContext fsm_;
 
 	Time time_;
 	chr::steady_clock::time_point last_tick_;
+	Mode mode_;
 
 	public:
 	void aPressed() { fsm_.A(); }
@@ -30,11 +30,16 @@ class Watch
 
 	void frame();
 
+	private:
+	void clearScreen() const { std::cout << "\x1B[2J\x1B[H"; }
+	void display() const;
+
 	public:
-	void showTime() { display_->showTime(); }
-	void showAlarm() { display_->showAlarm(); }
-	void showCountdown() { display_->showCountdown(); }
-	void showStopwatch() { display_->showStopwatch(); }
+	void showAlarm() { mode_ = ALARM; }
+	void showCountdown() { mode_ = COUNTDOWN; }
+	void showStopwatch() { mode_ = STOPWATCH; }
+	void showTime() { mode_ = TIME; }
+
 	void incTime()	{ time_.inc(); }
 
 	void resetSeconds() { time_.setSeconds(0); }

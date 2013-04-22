@@ -3,12 +3,11 @@
 
 #include <Input.h>
 #include <Watch.h>
-#include <Display.h>
 
 class Sched
 {
 	public:
-	Sched(Input* input, Watch* watch, Display* display);
+	Sched(Input* input, Watch* watch);
 
 	public:
 	void run();
@@ -19,7 +18,6 @@ class Sched
 	private:
 	Input* input_;
 	Watch* watch_;
-	Display* display_;
 };
 
 #endif
