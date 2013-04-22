@@ -1,9 +1,11 @@
 #include <Watch.h>
+#include <sstream>
 
 Watch::Watch(bool isDebugFsm)
 	: fsm_(*this)
 	, last_tick_(chr::steady_clock::now())
 	, mode_(TIME)
+	, is24hours_(true)
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
@@ -32,7 +34,22 @@ void Watch::display() const
 {
 	switch(mode_)
 	{
-		case TIME: std::cout << time_.asString() << std::endl; return;
+		case TIME:
+		{
+			const char* weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+
+			std::cout << weekdays[time_.weekday()] << "  " << time_.monthday() << "- " << time_.year()%2000 << "\t";
+
+			if(is24hours_)
+				std::cout << "24  " << time_.hour();
+			else
+				std::cout << (time_.hour()<13? "AM  " : "PM  ") << time_.hour()%13;
+			std::cout << ":" << time_.minutes() << ":" << time_.seconds()
+				<< std::endl;
+
+			return;
+		}
+
 		case ALARM: std::cout << "ALARM" << std::endl; return;
 		case COUNTDOWN: std::cout << "COUNTDOWN" << std::endl; return;
 		case STOPWATCH: std::cout << "STOPWATCH" << std::endl; return;

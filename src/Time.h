@@ -79,8 +79,6 @@ struct Time
 	int monthday() const { return monthday_; }
 	int year() const { return year_; }
 
-	std::string asString(bool is24hours = true) const;
-
 	private:
 	int sec_;
 	int min_;

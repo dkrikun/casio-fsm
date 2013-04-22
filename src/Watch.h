@@ -20,6 +20,7 @@ class Watch
 	Time time_;
 	chr::steady_clock::time_point last_tick_;
 	Mode mode_;
+	bool is24hours_;
 
 	public:
 	void aPressed() { fsm_.A(); }
@@ -51,7 +52,10 @@ class Watch
 	void incMonth() { time_.incMonth(); }
 	void incDay() { time_.incDay(); }
 	
-	void invert24Pm() {};	//TODO
+	void invert24Pm()
+	{
+		is24hours_ = !is24hours_;
+	};
 
 };
 

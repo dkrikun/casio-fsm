@@ -1,7 +1,6 @@
 #include <Time.h>
 
 #include <assert.h>
-#include <sstream>
 
 
 Time::Time()
@@ -44,24 +43,6 @@ int Time::maxMonthday() const
 	return month_ == 1? (isLeapYear()? 28 : 29)
 		: ((month_ == 0 || month_ == 2 || month_ == 4 || month_ == 6
 			|| month_ == 7 || month_ == 9 || month_ == 11)? 31 : 30);
-}
-
-
-std::string Time::asString(bool is24hours) const
-{
-	std::stringstream ss;
-
-	const char* weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
-
-	ss << weekdays[weekday_] << "  " << monthday_ << "- " << year_%2000 << "\t";
-
-	if(is24hours)
-		ss << "24  " << hour_;
-	else
-		ss << (hour_<13? "AM  " : "PM  ") << hour_%13;
-	ss << ":" << min_ << ":" << sec_;
-
-	return ss.str();
 }
 
 void Time::checkInvariant() const
