@@ -43,7 +43,13 @@ void Watch::display() const
 			if(is24hours_)
 				std::cout << "24  " << time_.hour();
 			else
-				std::cout << (time_.hour()<13? "AM  " : "PM  ") << time_.hour()%13;
+			{
+				std::cout << (time_.hour()<12? "AM  " : "PM  ");
+				int am_pm_hours = time_.hour()%12;
+				if(am_pm_hours == 0)
+					am_pm_hours = 12;
+				std::cout << am_pm_hours;
+			}
 			std::cout << ":" << time_.minutes() << ":" << time_.seconds()
 				<< std::endl;
 
