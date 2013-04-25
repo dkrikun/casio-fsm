@@ -60,6 +60,19 @@ class Watch
 		is24hours_ = !is24hours_;
 	};
 
+
+	public:
+	void resetReturnTimeout()
+	{ return_timestamp_ = chr::steady_clock::now(); }
+
+	int returnTimeoutSec() const
+	{
+		chr::nanoseconds delta = chr::steady_clock::now() - return_timestamp_;
+		return chr::duration_cast<chr::seconds>(delta).count();
+	}
+
+	private:
+	chr::steady_clock::time_point return_timestamp_;
 };
 
 #endif

@@ -13,26 +13,25 @@
 
 %map WatchFsm
 %%
-// State		Transition		End State			Action(s)
 Timekeep
 {
-				C				Alarm				{ showAlarm(); }
-				A				push(TimeSet::Seconds)	{}
+	C			Alarm					{ showAlarm(); }
+	A			push(TimeSet::Seconds)	{ resetReturnTimeout(); }
 }
 
 Alarm
 {
-				C				Countdown			{ showCountdown(); }
+	C			Countdown				{ showCountdown(); }
 }
 
 Countdown
 {
-				C				Stopwatch			{ showStopwatch(); }
+	C			Stopwatch				{ showStopwatch(); }
 }
 
 Stopwatch
 {
-				C				Timekeep			{ showTime(); }
+	C			Timekeep				{ showTime(); }
 }
 
 Default
@@ -46,60 +45,101 @@ Default
 %map TimeSet
 %%
 
-// defaults, taken from any state in TimeSet
-Default
-{
-	A		pop()	{}					// return to timekeeping mode
-	D		nil		{ invert24Pm(); }	// invert 24/AM-PM mode
-	B		nil		{}
-	Tick	nil		{ incTime(); }
-}
-
 // C button circularly switches current value to set
 // Seconds -> Hour -> Minutes -> Year -> Month -> Day
 // and then return Day -> Seconds
 //
 // E button changes current value: for all but seconds, the value is
 // incremented, the seconds are reset to 0 and minutes are rounded
+// Also, if no button pressed for 10 sec., return to timekeeping mode
 // TODO long pressed E makes changes at high speed
-// TODO if there is no button pressed for a few minutes - go to timekeeping
+
+
+// defaults, taken from any state in TimeSet
+Default
+{
+	A		pop()	{ resetReturnTimeout(); }
+
+	D		nil
+	{
+		// invert 24/AM-PM mode
+		invert24Pm();
+		resetReturnTimeout();
+	}
+
+	B		nil		{ resetReturnTimeout(); }
+
+	// return to timekeeping if no button pressed for 50 sec.
+	Tick[ctxt.returnTimeoutSec() > 50]	pop()	{ incTime(); }
+	Tick								nil		{ incTime(); }
+}
 
 Seconds
 {
-	C							Hour {}
+	C							Hour
+	{ resetReturnTimeout(); }
 
 	E[ctxt.seconds() < 30]		nil
-		{ resetSeconds(); }
+	{
+		resetSeconds();
+		resetReturnTimeout();
+	}
 
 	E[ctxt.seconds() >=30]		nil
 	{
 		resetSeconds();
 		incMinutes();
+		resetReturnTimeout();
 	}
 }
 Hour
 {
-				C				Minutes				{}
-				E				nil					{ incHour(); }
+	C				Minutes		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incHour();
+	}
 }
 Minutes
 {
-				C				Year				{}
-				E				nil					{ incMinutes(); }
+	C				Year		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incMinutes();
+	}
 }
 Year
 {
-				C				Month				{}
-				E				nil					{ incYear(); }
+	C				Month		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incYear();
+	}
 }
 Month
 {
-				C				Day					{}
-				E				nil					{ incMonth(); }
+	C				Day			{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incMonth();
+	}
 }
 Day
 {
-				C				Hour				{}
-				E				nil					{ incDay(); }
+	C				Hour		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incDay();
+	}
 }
 %%
