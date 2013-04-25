@@ -12,30 +12,33 @@ class Watch
 {
 	public:
 	Watch(bool isDebugFsm);
-	enum Mode { TIME = 0, ALARM, COUNTDOWN, STOPWATCH };
 
 	private:
 	WatchContext fsm_;
 
 	Time time_;
 	chr::steady_clock::time_point last_tick_;
-	Mode mode_;
+	enum { TIME = 0, ALARM, COUNTDOWN, STOPWATCH } mode_;
 	bool is24hours_;
 
 	public:
+	// events triggered by Input
 	void aPressed() { fsm_.A(); }
 	void bPressed() { fsm_.B(); }
 	void cPressed() { fsm_.C(); }
 	void dPressed() { fsm_.D(); }
 	void ePressed() { fsm_.E(); }
 
+	// frame, called by Sched each cycle
 	void frame();
 
 	private:
+	// output
 	void clearScreen() const { std::cout << "\x1B[2J\x1B[H"; }
 	void display() const;
 
 	public:
+	// various actions, invoked from within the fsm
 	void showAlarm() { mode_ = ALARM; }
 	void showCountdown() { mode_ = COUNTDOWN; }
 	void showStopwatch() { mode_ = STOPWATCH; }

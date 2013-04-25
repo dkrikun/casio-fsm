@@ -6,9 +6,14 @@
 
 %start WatchFsm::Timekeep
 
+// Top-level fsm, governs transitions between watch modes, namely timekeeping
+// (aka time), alarm, countdown and stopwatch (circularly, on C button).
+// Also, on A button, delve into the time set mode.
+// Also, the Default state Tick internal loop increments clock (by one sec.)
+
 %map WatchFsm
 %%
-// State		Transition		End State		Action(s)
+// State		Transition		End State			Action(s)
 Timekeep
 {
 				C				Alarm				{ showAlarm(); }

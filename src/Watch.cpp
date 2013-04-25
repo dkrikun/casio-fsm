@@ -36,9 +36,11 @@ void Watch::display() const
 	{
 		case TIME:
 		{
-			const char* weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+			const char* weekdays[] =
+				{ "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
-			std::cout << weekdays[time_.weekday()] << "  " << time_.monthday() << "- " << time_.year()%2000 << "\t";
+			std::cout << weekdays[time_.weekday()] << "  " << time_.monthday()
+				<< "- " << time_.year()%2000 << "\t";
 
 			if(is24hours_)
 				std::cout << "24  " << time_.hour();
