@@ -17,9 +17,10 @@ int readch();
 
 }
 
-Input::Input(Watch* watch)
+Input::Input(Watch* watch, bool isDebug)
 	: watch_(watch)
 	, shouldStop_(false)
+	, isDebug_(isDebug)
 {
 	init_keyboard();
 }
@@ -44,7 +45,8 @@ void Input::frame()
 		return;
 
 	char ch = readch();
-	// std::cout << "ch=" << ch << std::endl;
+	if(isDebug_)
+		std::cout << "ch pressed=" << ch << std::endl;
 
 	if(ch == 'q' || ch == 'Q')
 	{

@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 	po::options_description desc("options");
 	desc.add_options()
 		("help,h", "display this help message")
-		("debug,d", "debug print fsm transitions")
+		("debug,d", "show debug messages")
 	;
 
 	po::variables_map vm;
@@ -23,10 +23,10 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	const bool isDebugFsm = vm.count("debug");
+	const bool isDebug = vm.count("debug");
 
-	Watch w(isDebugFsm);
-	Input i(&w);
+	Watch w(isDebug);
+	Input i(&w, isDebug);
 
 	Sched sched(&i, &w);
 	sched.run();
