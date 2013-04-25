@@ -7,7 +7,7 @@
 class Input
 {
 	public:
-	Input(Watch* watch);
+	Input(Watch* watch, bool isDebug);
 	~Input();
 
 	private:
@@ -31,6 +31,7 @@ class Input
 
 	private:
 	bool shouldStop_;
+	const bool isDebug_;
 };
 
 

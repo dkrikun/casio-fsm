@@ -1,18 +1,20 @@
 #include <Watch.h>
 #include <sstream>
 
-Watch::Watch(bool isDebugFsm)
+Watch::Watch(bool isDebugFsm, bool isNoCls)
 	: fsm_(*this)
 	, last_tick_(chr::steady_clock::now())
 	, mode_(TIME)
 	, is24hours_(true)
+	, isNoCls_(isNoCls)
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
 
 void Watch::frame()
 {
-	clearScreen();
+	if(!isNoCls_)
+		clearScreen();
 
 	// invoke fsm_.Tick() for each second passed since last frame()
 	// this is in order to compensate for Sched's too slow clock, just in

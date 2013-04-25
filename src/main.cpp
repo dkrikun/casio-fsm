@@ -12,6 +12,7 @@ int main(int argc, char** argv)
 	desc.add_options()
 		("help,h", "display this help message")
 		("debug,d", "show debug messages")
+		("no-cls", "don't clear screen after each frame")
 	;
 
 	po::variables_map vm;
@@ -24,8 +25,9 @@ int main(int argc, char** argv)
 	}
 
 	const bool isDebug = vm.count("debug");
+	const bool isNoCls = vm.count("no-cls");
 
-	Watch w(isDebug);
+	Watch w(isDebug, isNoCls);
 	Input i(&w, isDebug);
 
 	Sched sched(&i, &w);

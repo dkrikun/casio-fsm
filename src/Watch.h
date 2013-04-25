@@ -11,7 +11,7 @@ namespace chr = boost::chrono;
 class Watch
 {
 	public:
-	Watch(bool isDebugFsm);
+	Watch(bool isDebugFsm, bool isNoCls);
 
 	private:
 	WatchContext fsm_;
@@ -20,6 +20,7 @@ class Watch
 	chr::steady_clock::time_point last_tick_;
 	enum { TIME = 0, ALARM, COUNTDOWN, STOPWATCH } mode_;
 	bool is24hours_;
+	bool isNoCls_;
 
 	public:
 	// events triggered by Input
