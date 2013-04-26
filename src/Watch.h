@@ -16,10 +16,6 @@ class Watch
 	private:
 	WatchContext fsm_;
 
-	Time time_;
-	chr::steady_clock::time_point last_tick_;
-	enum { TIME = 0, ALARM, COUNTDOWN, STOPWATCH } mode_;
-	bool is24hours_;
 	bool isNoCls_;
 
 	public:
@@ -38,15 +34,30 @@ class Watch
 	void clearScreen() const { std::cout << "\x1B[2J\x1B[H"; }
 	void display() const;
 
+	// top level mode selection
+	private:
+	enum { TIME = 0, ALARM, COUNTDOWN, STOPWATCH } mode_;
 	public:
-	// various actions, invoked from within the fsm
 	void showAlarm() { mode_ = ALARM; }
 	void showCountdown() { mode_ = COUNTDOWN; }
 	void showStopwatch() { mode_ = STOPWATCH; }
 	void showTime() { mode_ = TIME; }
 
+	// increment time each second
+	private:
+	Time time_;
+	chr::steady_clock::time_point last_tick_;
+	public:
 	void incTime()	{ time_.inc(); }
 
+	// whether to show 24-hours or AM-PM display
+	private:
+	bool is24hours_;
+	public:
+	void invert24Pm()
+	{ is24hours_ = !is24hours_; };
+
+	// methods to edit specific field in the time setting mode
 	void resetSeconds() { time_.setSeconds(0); }
 	int seconds() const { return time_.seconds(); }
 
@@ -55,25 +66,24 @@ class Watch
 	void incYear() { time_.incYear(); }
 	void incMonth() { time_.incMonth(); }
 	void incDay() { time_.incDay(); }
-	
-	void invert24Pm()
-	{
-		is24hours_ = !is24hours_;
-	};
 
 
+	// timeout to auto-return from time setting to time keeping mode, if no button
+	// has been pressed for a while
+	private:
+	chr::steady_clock::time_point return_timestamp_;	// last time when a
+														// button press has
+														// been registered
 	public:
 	void resetReturnTimeout()
 	{ return_timestamp_ = chr::steady_clock::now(); }
 
-	int returnTimeoutSec() const
+	// seconds since last button pressed
+	int returnTimeoutElapsed() const
 	{
 		chr::nanoseconds delta = chr::steady_clock::now() - return_timestamp_;
 		return chr::duration_cast<chr::seconds>(delta).count();
 	}
-
-	private:
-	chr::steady_clock::time_point return_timestamp_;
 };
 
 #endif

@@ -70,8 +70,8 @@ Default
 	B		nil		{ resetReturnTimeout(); }
 
 	// return to timekeeping if no button pressed for 50 sec.
-	Tick[ctxt.returnTimeoutSec() > 50]	pop()	{ incTime(); }
-	Tick								nil		{ incTime(); }
+	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()	{ incTime(); }
+	Tick									nil		{ incTime(); }
 }
 
 Seconds
