@@ -75,6 +75,8 @@ Default
 }
 
 Seconds
+	Entry	{ setCurrEdit(Watch::SEC); }
+	Exit	{ setCurrEdit(Watch::NONE); }
 {
 	C							Hour
 	{ resetReturnTimeout(); }
@@ -93,6 +95,8 @@ Seconds
 	}
 }
 Hour
+	Entry	{ setCurrEdit(Watch::HOUR); }
+	Exit	{ setCurrEdit(Watch::NONE); }
 {
 	C				Minutes		{ resetReturnTimeout(); }
 
@@ -103,6 +107,8 @@ Hour
 	}
 }
 Minutes
+	Entry	{ setCurrEdit(Watch::MIN); }
+	Exit	{ setCurrEdit(Watch::NONE); }
 {
 	C				Year		{ resetReturnTimeout(); }
 
@@ -113,6 +119,8 @@ Minutes
 	}
 }
 Year
+	Entry	{ setCurrEdit(Watch::YEAR); }
+	Exit	{ setCurrEdit(Watch::NONE); }
 {
 	C				Month		{ resetReturnTimeout(); }
 
@@ -123,6 +131,8 @@ Year
 	}
 }
 Month
+	Entry	{ setCurrEdit(Watch::MONTH); }
+	Exit	{ setCurrEdit(Watch::NONE); }
 {
 	C				Day			{ resetReturnTimeout(); }
 
@@ -133,6 +143,8 @@ Month
 	}
 }
 Day
+	Entry	{ setCurrEdit(Watch::MONTHDAY); }
+	Exit	{ setCurrEdit(Watch::NONE); }
 {
 	C				Hour		{ resetReturnTimeout(); }
 

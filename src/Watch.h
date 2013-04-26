@@ -15,7 +15,6 @@ class Watch
 
 	private:
 	WatchContext fsm_;
-
 	bool isNoCls_;
 
 	public:
@@ -66,6 +65,15 @@ class Watch
 	void incYear() { time_.incYear(); }
 	void incMonth() { time_.incMonth(); }
 	void incDay() { time_.incDay(); }
+
+	// field being edited (relevant in the time setting mode only)
+	public:
+	enum CurrEdit { NONE = 0, SEC, MIN, HOUR, MONTHDAY, MONTH, YEAR };
+	private:
+	CurrEdit curr_edit_;
+	public:
+	void setCurrEdit(CurrEdit value)
+	{ curr_edit_ = value; }
 
 
 	// timeout to auto-return from time setting to time keeping mode, if no button

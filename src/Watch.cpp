@@ -58,6 +58,8 @@ void Watch::display() const
 			std::cout << ":" << time_.minutes() << ":" << time_.seconds()
 				<< std::endl;
 
+			std::cout << curr_edit_ << std::endl;
+
 			return;
 		}
 
