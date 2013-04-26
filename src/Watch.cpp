@@ -42,23 +42,50 @@ void Watch::display() const
 			const char* weekdays[] =
 				{ "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
-			std::cout << weekdays[time_.weekday()] << "  " << time_.monthday()
-				<< "- " << time_.year()%2000 << "\t";
+			// can't get blinking work, instead underline the field being edited
+			const char* underline_start = "\33[4m";
+			const char* underline_end = "\33[m";
+
+			# define maybe_underline(x,y)\
+			do { \
+			if(curr_edit_ == (x)) std::cout << underline_start; \
+			std::cout << (y); \
+			if(curr_edit_ == (x)) std::cout << underline_end; \
+			} while(0);
+
+			// if any field is being edited, i.e. in the time setting mode
+			// display year instead of weekday
+			if(curr_edit_ == NONE)
+				std::cout << weekdays[time_.weekday()];
+			else
+				maybe_underline(YEAR, time_.year()%2000);
+
+			std::cout << "  ";
+			maybe_underline(MONTH,time_.month());
+			std::cout << "- ";
+			maybe_underline(MONTHDAY,time_.monthday());
+			std::cout << "\t ";
 
 			if(is24hours_)
-				std::cout << "24  " << time_.hour();
+			{
+				std::cout << "24  ";
+				maybe_underline(HOUR,time_.hour());
+			}
 			else
 			{
 				std::cout << (time_.hour()<12? "AM  " : "PM  ");
 				int am_pm_hours = time_.hour()%12;
 				if(am_pm_hours == 0)
 					am_pm_hours = 12;
-				std::cout << am_pm_hours;
+				maybe_underline(HOUR,am_pm_hours);
 			}
-			std::cout << ":" << time_.minutes() << ":" << time_.seconds()
-				<< std::endl;
+			std::cout << ":";
+			maybe_underline(MIN,time_.minutes());
+			std::cout << ":";
+			maybe_underline(SEC,time_.seconds());
+			std::cout << std::endl;
 
-			std::cout << curr_edit_ << std::endl;
+			# undef maybe_underline
 
 			return;
 		}
