@@ -11,7 +11,7 @@ void Sched::run()
 {
 	while(!shouldStop())
 	{
-		const unsigned int period_usec = 333333;
+		const unsigned int period_usec = 166667;
 		usleep(period_usec);
 
 		input_->frame();
