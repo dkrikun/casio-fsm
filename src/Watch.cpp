@@ -3,10 +3,11 @@
 
 Watch::Watch(bool isDebugFsm, bool isNoCls)
 	: fsm_(*this)
-	, last_tick_(chr::steady_clock::now())
-	, mode_(TIME)
-	, is24hours_(true)
 	, isNoCls_(isNoCls)
+	, mode_(TIME)
+	, last_tick_(chr::steady_clock::now())
+	, is24hours_(true)
+	, curr_edit_(NONE)
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
