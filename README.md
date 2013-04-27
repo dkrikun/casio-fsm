@@ -26,7 +26,11 @@ When this is ready you can either use VirtualBox UI or connect via ssh client to
  * **ssh client**: on Linux/Git Bash use `vagrant ssh`, otherwise use some other ssh client like PuTTY to connect manually
 
 After that, `cd /vagrant` to go to the repository root folder, which is shared between the host and the VM.
-Finally, `make clean; make` to build, `./casio-fsm` to run.
+
+### Building and running
+To build, `make clean; make`, to output fsm as graph `make dot png`.
+To run, `./casio-fsm`, see `./casio-fsm --help` for usage.
+
 
 Have fun!
 
