@@ -76,7 +76,8 @@ class Watch
 	{ curr_edit_ = value; }
 
 
-	// timeout to auto-return from time setting to time keeping mode, if no button
+	// timeout to auto-return from time setting to time keeping mode
+	// (or from alarm setting to alarm mode) if no button
 	// has been pressed for a while
 	private:
 	chr::steady_clock::time_point return_timestamp_;	// last time when a
@@ -92,6 +93,49 @@ class Watch
 		chr::nanoseconds delta = chr::steady_clock::now() - return_timestamp_;
 		return chr::duration_cast<chr::seconds>(delta).count();
 	}
+
+	private:
+	bool isAlarmSet_;
+	bool isHourlySignalSet_;
+	Time alarm_;
+
+	public:
+	void incAlarmMinutes() { alarm_.incMinutes(); }
+	void incAlarmHour() { alarm_.incHour(); }
+	void incAlarmMonth() { alarm_.incMonth(true); }
+	void incAlarmDay() { alarm_.incDay(true); }
+
+	void setAlarmOn() { isAlarmSet_ = true; }
+	// cycle through types
+	// both on -> both off -> alarm only -> hourly signal only
+	// and returns to both on
+	void switchAlarmType()
+	{
+		if(isAlarmSet_)
+		{
+			isAlarmSet_ = false;
+			isHourlySignalSet_ = !isHourlySignalSet_;
+		}
+		else
+			isAlarmSet_ = true;
+	}
+
+	bool shouldAlarm() const
+	{
+		const int alarm_duration_sec = 20;
+		return ((time_.month() == alarm_.month()) || alarm_.month() == Time::ANY)
+			&& ((time_.monthday() == alarm_.monthday())
+					|| alarm_.monthday() == Time::ANY)
+			&& (time_.hour() == alarm_.hour())
+			&& (time_.minutes() == alarm_.minutes())
+			&& (time_.seconds() - alarm_.seconds() <= alarm_duration_sec);
+	}
+
+	bool shouldSignalHour() const
+	{
+		return time_.minutes() == 0 && time_.seconds() <= 1;
+	}
 };
+
 
 #endif

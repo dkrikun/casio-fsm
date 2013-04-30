@@ -51,16 +51,19 @@ void Time::checkInvariant() const
 	assert(min_>=0 && min_<60);
 	assert(hour_>=0 && hour_<24);
 	assert(weekday_>=0 && weekday_<7);
-	assert(month_>=0 && month_<12);
+	assert((month_>=0 && month_<12) || month_ == ANY);
 	assert(year_>=2000 && year_<2100);		// accorcding to the watch spec
 	
-	assert(monthday_>=0);
-	if(month_ == 0 || month_ == 2 || month_ == 4 || month_ == 6
-			|| month_ == 7 || month_ == 9 || month_ == 11)
-		assert(monthday_<31);
-	else if(month_ == 1)
-		assert(monthday_<(isLeapYear()? 28 : 29));
-	else
-		assert(monthday_<30);
+	if(monthday_ != ANY)
+	{
+		assert(monthday_>=0);
+		if(month_ == 0 || month_ == 2 || month_ == 4 || month_ == 6
+				|| month_ == 7 || month_ == 9 || month_ == 11)
+			assert(monthday_<31);
+		else if(month_ == 1)
+			assert(monthday_<(isLeapYear()? 28 : 29));
+		else
+			assert(monthday_<30);
+	}
 }
 	

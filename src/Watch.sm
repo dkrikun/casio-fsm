@@ -22,6 +22,13 @@ Timekeep
 Alarm
 {
 	C			Countdown				{ showCountdown(); }
+	A			push(AlarmSet::Hour)
+	{
+		setAlarmOn();
+		resetReturnTimeout();
+	}
+
+	E			nil						{ switchAlarmType(); }
 }
 
 Countdown
@@ -152,6 +159,81 @@ Day
 	{
 		resetReturnTimeout();
 		incDay();
+	}
+}
+%%
+
+%map AlarmSet
+%%
+
+// C button circularly switches current value to set
+// Hour -> Minutes -> Month -> Day
+// and then return Day -> Hour
+//
+// E button increments curr value
+// Also, if no button pressed for 50 sec., return to alarm mode
+// TODO long pressed E makes changes at high speed
+
+
+// defaults, taken from any state in TimeSet
+Default
+{
+	A		pop()	{ resetReturnTimeout(); }
+
+	D		nil		{ resetReturnTimeout(); }
+	B		nil		{ resetReturnTimeout(); }
+
+	// return to alarm if no button pressed for 50 sec.
+	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()	{ incTime(); }
+	Tick									nil		{ incTime(); }
+}
+
+Hour
+	Entry	{ setCurrEdit(Watch::HOUR); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Minutes		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incAlarmHour();
+	}
+}
+Minutes
+	Entry	{ setCurrEdit(Watch::MIN); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Month		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incAlarmMinutes();
+	}
+}
+Month
+	Entry	{ setCurrEdit(Watch::MONTH); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Day			{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incAlarmMonth();
+	}
+}
+Day
+	Entry	{ setCurrEdit(Watch::MONTHDAY); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Hour		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incAlarmDay();
 	}
 }
 %%

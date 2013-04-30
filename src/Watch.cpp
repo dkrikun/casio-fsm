@@ -8,6 +8,8 @@ Watch::Watch(bool isDebugFsm, bool isNoCls)
 	, last_tick_(chr::steady_clock::now())
 	, is24hours_(true)
 	, curr_edit_(NONE)
+	, isAlarmSet_(false)
+	, isHourlySignalSet_(false)
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
@@ -35,6 +37,23 @@ void Watch::frame()
 
 void Watch::display() const
 {
+	// can't get blinking work, instead underline the field being edited
+	const char* underline_start = "\33[4m";
+	const char* underline_end = "\33[m";
+
+	# define maybe_underline(x,y)\
+	do { \
+	if(curr_edit_ == (x)) std::cout << underline_start; \
+	std::cout << (y); \
+	if(curr_edit_ == (x)) std::cout << underline_end; \
+	} while(0)
+
+	if(shouldAlarm())
+		std::cout << "*alarm*  ";
+
+	if(shouldSignalHour())
+		std::cout << "*hour*  ";
+
 	switch(mode_)
 	{
 		case TIME:
@@ -42,16 +61,10 @@ void Watch::display() const
 			const char* weekdays[] =
 				{ "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
-			// can't get blinking work, instead underline the field being edited
-			const char* underline_start = "\33[4m";
-			const char* underline_end = "\33[m";
-
-			# define maybe_underline(x,y)\
-			do { \
-			if(curr_edit_ == (x)) std::cout << underline_start; \
-			std::cout << (y); \
-			if(curr_edit_ == (x)) std::cout << underline_end; \
-			} while(0);
+			if(isAlarmSet_)
+				std::cout << "(a) ";
+			if(isHourlySignalSet_)
+				std::cout << "(h) ";
 
 			// if any field is being edited, i.e. in the time setting mode
 			// display year instead of weekday
@@ -85,13 +98,50 @@ void Watch::display() const
 			maybe_underline(SEC,time_.seconds());
 			std::cout << std::endl;
 
-			# undef maybe_underline
+			return;
+		}
+
+		case ALARM:
+		{
+			if(isAlarmSet_)
+				std::cout << "(a) ";
+			if(isHourlySignalSet_)
+				std::cout << "(h) ";
+			std::cout << "AL  ";
+			if(alarm_.month() == Time::ANY)
+				maybe_underline(MONTH,"-");
+			else
+				maybe_underline(MONTH,alarm_.month());
+			std::cout << "- ";
+			if(alarm_.monthday() == Time::ANY)
+				maybe_underline(MONTHDAY,"--");
+			else
+				maybe_underline(MONTHDAY,alarm_.monthday());
+			std::cout << "\t ";
+			if(is24hours_)
+			{
+				std::cout << "24  ";
+				maybe_underline(HOUR,alarm_.hour());
+			}
+			else
+			{
+				std::cout << (alarm_.hour()<12? "AM  " : "PM  ");
+				int am_pm_hours = alarm_.hour()%12;
+				if(am_pm_hours == 0)
+					am_pm_hours = 12;
+				maybe_underline(HOUR,am_pm_hours);
+			}
+			std::cout << ":";
+			maybe_underline(MIN,alarm_.minutes());
+			std::cout << ":";
+			maybe_underline(SEC,alarm_.seconds());
+			std::cout << std::endl;
 
 			return;
 		}
 
-		case ALARM: std::cout << "ALARM" << std::endl; return;
 		case COUNTDOWN: std::cout << "COUNTDOWN" << std::endl; return;
 		case STOPWATCH: std::cout << "STOPWATCH" << std::endl; return;
 	}
+	# undef maybe_underline
 }

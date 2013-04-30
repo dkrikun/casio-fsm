@@ -8,6 +8,9 @@ struct Time
 	public:
 	Time();
 
+	// for alarms, to indicate that the alarm starts on any
+	// day, week, etc.
+	static const int ANY = -1;
 	void inc();
 
 	void setSeconds(int value)
@@ -47,16 +50,21 @@ struct Time
 			hour_ = 0;
 	}
 
-	void incMonth()
+	void incMonth(bool isAlarm = false)
 	{
-		if(++month_ == 12)
+		if(month_ == ANY)
 			month_ = 0;
+		else if(++month_ == 12)
+			month_ = isAlarm? ANY : 0;
 	}
 
-	void incDay()
+	void incDay(bool isAlarm = false)
 	{
-		if(++monthday_ == maxMonthday())
+		if(monthday_ == ANY)
 			monthday_ = 0;
+
+		else if(++monthday_ == maxMonthday())
+			monthday_ = isAlarm? ANY : 0;
 
 		if(++weekday_ == 7)
 			weekday_ = 0;
