@@ -4,7 +4,7 @@
 
 
 Time::Time()
-	: sec_(0), min_(0), hour_(0), weekday_(0)
+	: sec_(0), min_(0), hour_(0), weekday_(6)	// 01.01.2000 was Saturday
 	, month_(0), monthday_(0), year_(2000)
 {}
 
