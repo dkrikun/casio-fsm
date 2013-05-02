@@ -15,25 +15,37 @@
 %%
 Timekeep
 {
-	C			Alarm					{ showAlarm(); }
-	A			push(TimeSet::Seconds)	{ resetReturnTimeout(); }
+	C			Alarm						{ showAlarm(); }
+
+	A			push(TimeSet::Seconds)		{ resetReturnTimeout(); }
 }
 
 Alarm
 {
-	C			Countdown				{ showCountdown(); }
+	C			Countdown					{ showCountdown(); }
+
 	A			push(AlarmSet::Hour)
 	{
 		setAlarmOn();
 		resetReturnTimeout();
 	}
 
-	E			nil						{ switchAlarmType(); }
+	E			nil							{ switchAlarmType(); }
 }
 
 Countdown
 {
-	C			Stopwatch				{ showStopwatch(); }
+	C			Stopwatch					{ showStopwatch(); }
+
+	A[ctxt.isCountdownOn()]	nil
+	{
+		invertCountdownOn();
+		resetCountdown();
+	}
+
+	A			push(CountdownSet::Hour)	{ resetReturnTimeout(); }
+
+	E			nil							{ invertCountdownOn(); }
 }
 
 Stopwatch
@@ -43,7 +55,12 @@ Stopwatch
 
 Default
 {
-	Tick		nil		{ incTime(); }
+	Tick		nil
+	{
+		incTime();
+		decCountdown();
+	}
+
 	Default		nil		{}
 }
 %%
@@ -77,8 +94,17 @@ Default
 	B		nil		{ resetReturnTimeout(); }
 
 	// return to timekeeping if no button pressed for 50 sec.
-	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()	{ incTime(); }
-	Tick									nil		{ incTime(); }
+	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()
+	{
+		incTime();
+		decCountdown();
+	}
+
+	Tick		nil
+	{
+		incTime();
+		decCountdown();
+	}
 }
 
 Seconds
@@ -183,9 +209,18 @@ Default
 	D		nil		{ resetReturnTimeout(); }
 	B		nil		{ resetReturnTimeout(); }
 
-	// return to alarm if no button pressed for 50 sec.
-	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()	{ incTime(); }
-	Tick									nil		{ incTime(); }
+	// return to timekeeping if no button pressed for 50 sec.
+	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()
+	{
+		incTime();
+		decCountdown();
+	}
+
+	Tick		nil
+	{
+		incTime();
+		decCountdown();
+	}
 }
 
 Hour
@@ -234,6 +269,78 @@ Day
 	{
 		resetReturnTimeout();
 		incAlarmDay();
+	}
+}
+%%
+
+%map CountdownSet
+%%
+
+// C button circularly switches current value to set
+// Hour -> Minutes -> Seconds
+// and then return Seconds -> Hour
+//
+// E button increments curr value
+// Also, if no button pressed for 50 sec., return to countdown mode
+// TODO long pressed E makes changes at high speed
+
+
+// defaults, taken from any state in TimeSet
+Default
+{
+	A		pop()
+	{
+		resetCountdown();
+		resetReturnTimeout();
+	}
+
+	D		nil		{ resetReturnTimeout(); }
+	B		nil		{ resetReturnTimeout(); }
+
+	// return to alarm if no button pressed for 50 sec.
+	Tick[ctxt.returnTimeoutElapsed() > 50]	pop()
+	{
+		incTime();
+		resetCountdown();
+	}
+
+	Tick		nil { incTime(); }
+}
+
+Hour
+	Entry	{ setCurrEdit(Watch::HOUR); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Minutes		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incCountdownHour();
+	}
+}
+Minutes
+	Entry	{ setCurrEdit(Watch::MIN); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Seconds		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incCountdownMinutes();
+	}
+}
+Seconds
+	Entry	{ setCurrEdit(Watch::SEC); }
+	Exit	{ setCurrEdit(Watch::NONE); }
+{
+	C				Hour		{ resetReturnTimeout(); }
+
+	E				nil
+	{
+		resetReturnTimeout();
+		incCountdownSeconds();
 	}
 }
 %%

@@ -19,11 +19,51 @@ class Watch
 
 	public:
 	// events triggered by Input
-	void aPressed() { fsm_.A(); }
-	void bPressed() { fsm_.B(); }
-	void cPressed() { fsm_.C(); }
-	void dPressed() { fsm_.D(); }
-	void ePressed() { fsm_.E(); }
+	void aPressed()
+	{
+		if(shouldSignalCountdown())
+		{
+			cancelSignalCountdown();
+			return;
+		}
+		fsm_.A();
+	}
+	void bPressed()
+	{
+		if(shouldSignalCountdown())
+		{
+			cancelSignalCountdown();
+			return;
+		}
+		fsm_.B();
+	}
+	void cPressed()
+	{
+		if(shouldSignalCountdown())
+		{
+			cancelSignalCountdown();
+			return;
+		}
+		fsm_.C();
+	}
+	void dPressed()
+	{
+		if(shouldSignalCountdown())
+		{
+			cancelSignalCountdown();
+			return;
+		}
+		fsm_.D();
+	}
+	void ePressed()
+	{
+		if(shouldSignalCountdown())
+		{
+			cancelSignalCountdown();
+			return;
+		}
+		fsm_.E();
+	}
 
 	// frame, called by Sched each cycle
 	void frame();
@@ -133,6 +173,87 @@ class Watch
 	bool shouldSignalHour() const
 	{
 		return time_.minutes() == 0 && time_.seconds() <= 1;
+	}
+
+	private:
+	Time countdown_, countdownCurr_;
+	bool isCountdownOn_;
+	bool wasSignalOn_;
+	chr::steady_clock::time_point countdownSignalTimestamp_;
+
+	public:
+	// incCountdown* are for editing countdown time
+	void incCountdownSeconds() { countdown_.incSeconds(); }
+	void incCountdownMinutes() { countdown_.incMinutes(); }
+	void incCountdownHour() { countdown_.incHour(); }
+
+	void resetCountdown()
+	{
+		std::cout << "reset countdown" << std::endl;
+		countdownCurr_ = countdown_;
+	}
+
+	// invoked every frame
+	void decCountdown()
+	{
+		// reset countdown after the signal is over
+		wasSignalOn_ = wasSignalOn_ || shouldSignalCountdown();
+		if(wasSignalOn_ && !shouldSignalCountdown())
+		{
+			assert(!isCountdownOn_);
+
+			wasSignalOn_ = false;
+			resetCountdown();
+		}
+
+		if(!isCountdownOn_)
+			return;
+
+		// first dec, and then check equality to zero,
+		// because 00:00:00 is actually means a period of 24 hours,
+		// according to the spec
+		countdownCurr_.decPartial();
+		if(countdownCurr_.seconds() == 0 && countdownCurr_.minutes() == 0
+				&& countdownCurr_.hour() == 0
+				&& countdownCurr_.monthday() == 0)
+		{
+			// timestamp initiates countdown signal
+			countdownSignalTimestamp_ = chr::steady_clock::now();
+			isCountdownOn_ = false;
+		}
+	}
+
+	void cancelSignalCountdown()
+	{
+		resetCountdown();
+		wasSignalOn_ = false;
+		countdownSignalTimestamp_ = chr::steady_clock::time_point();
+	}
+
+	// is countdown in progress switch
+	void invertCountdownOn()
+	{
+		if(wasSignalOn_)
+		{
+			cancelSignalCountdown();
+			return;
+		}
+
+		isCountdownOn_ = !isCountdownOn_;
+	}
+
+
+	bool isCountdownOn() const { return isCountdownOn_; }
+
+
+	// signal for 10 sec. when the countdown drops to zero
+	private:
+	bool shouldSignalCountdown() const
+	{
+		const chr::seconds delta = chr::duration_cast<chr::seconds>
+			(chr::steady_clock::now() - countdownSignalTimestamp_);
+
+		return delta <= chr::seconds(10);
 	}
 };
 

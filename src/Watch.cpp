@@ -9,6 +9,9 @@ Watch::Watch(bool isDebugFsm, bool isNoCls)
 	, curr_edit_(NONE)
 	, isAlarmSet_(false)
 	, isHourlySignalSet_(false)
+	, isCountdownOn_(false)
+	, wasSignalOn_(false)
+	, countdownSignalTimestamp_(chr::steady_clock::time_point())
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
