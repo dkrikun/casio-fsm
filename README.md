@@ -28,7 +28,7 @@ When this is ready you can either use VirtualBox UI or connect via ssh client to
 After that, `cd /vagrant` to go to the repository root folder, which is shared between the host and the VM.
 
 ### Building and running
-To build, `make clean; make`, to output fsm as graph `make dot png`.
+To build, `make clean; make`, to output fsm as graph `make graph png`.
 To run, `./casio-fsm`, see `./casio-fsm --help` for usage.
 
 
