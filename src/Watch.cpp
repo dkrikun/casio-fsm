@@ -1,5 +1,4 @@
 #include <Watch.h>
-#include <sstream>
 
 Watch::Watch(bool isDebugFsm, bool isNoCls)
 	: fsm_(*this)

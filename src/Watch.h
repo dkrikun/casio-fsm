@@ -66,7 +66,7 @@ class Watch
 	void incMonth() { time_.incMonth(); }
 	void incDay() { time_.incDay(); }
 
-	// field being edited (relevant in the time setting mode only)
+	// field being edited
 	public:
 	enum CurrEdit { NONE = 0, SEC, MIN, HOUR, MONTHDAY, MONTH, YEAR };
 	private:
@@ -76,8 +76,7 @@ class Watch
 	{ curr_edit_ = value; }
 
 
-	// timeout to auto-return from time setting to time keeping mode
-	// (or from alarm setting to alarm mode) if no button
+	// timeout to auto-return from editing modes if no button
 	// has been pressed for a while
 	private:
 	chr::steady_clock::time_point return_timestamp_;	// last time when a
