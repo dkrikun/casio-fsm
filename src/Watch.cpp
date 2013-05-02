@@ -56,17 +56,20 @@ void Watch::display() const
 	if(shouldSignalHour())
 		std::cout << "*hour*  ";
 
+	if(shouldSignalCountdown())
+		std::cout << "*countdown*  ";
+
+	if(isAlarmSet_)
+		std::cout << "(a) ";
+	if(isHourlySignalSet_)
+		std::cout << "(h) ";
+
 	switch(mode_)
 	{
 		case TIME:
 		{
 			const char* weekdays[] =
 				{ "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
-
-			if(isAlarmSet_)
-				std::cout << "(a) ";
-			if(isHourlySignalSet_)
-				std::cout << "(h) ";
 
 			// if any field is being edited, i.e. in the time setting mode
 			// display year instead of weekday
@@ -105,10 +108,6 @@ void Watch::display() const
 
 		case ALARM:
 		{
-			if(isAlarmSet_)
-				std::cout << "(a) ";
-			if(isHourlySignalSet_)
-				std::cout << "(h) ";
 			std::cout << "AL  ";
 			if(alarm_.month() == Time::ANY)
 				maybe_underline(MONTH,"-");
@@ -142,7 +141,32 @@ void Watch::display() const
 			return;
 		}
 
-		case COUNTDOWN: std::cout << "COUNTDOWN" << std::endl; return;
+		case COUNTDOWN:
+		{
+			std::cout << "T`A  ";
+			if(is24hours_)
+				std::cout << time_.hour();
+			else
+			{
+				int am_pm_hours = alarm_.hour()%12;
+				if(am_pm_hours == 0)
+					am_pm_hours = 12;
+				std::cout << am_pm_hours;
+			}
+			std::cout << ":" << time_.minutes();
+			std::cout << "\t ";
+			std::cout << "    ";
+			const Time& to_display = curr_edit_ != NONE?
+				countdown_ : countdownCurr_;
+			maybe_underline(HOUR, to_display.hour());
+			std::cout << ":";
+			maybe_underline(MIN, to_display.minutes());
+			std::cout << ":";
+			maybe_underline(SEC, to_display.seconds());
+			std::cout << std::endl;
+
+			return;
+		}
 		case STOPWATCH: std::cout << "STOPWATCH" << std::endl; return;
 	}
 	# undef maybe_underline
