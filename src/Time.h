@@ -13,6 +13,29 @@ struct Time
 	static const int ANY = -1;
 	void inc();
 
+	// decrements time by one second, does not affect
+	// days, months and years
+	// note, circular
+	void decPartial()
+	{
+		if(--sec_ >= 0)
+			return;
+		sec_ = 59;
+		if(--min_ >= 0)
+			return;
+		min_ = 59;
+		if(--hour_ >= 0)
+			return;
+		hour_ = 23;
+	}
+
+	void zero()
+	{
+		sec_ = min_ = hour_ = month_ = 0;
+		weekday_ = 6;	// 01.01.2000 was Saturday
+		year_ = 2000;
+	}
+
 	void setSeconds(int value)
 	{ sec_ = value; checkInvariant(); }
 
@@ -37,6 +60,11 @@ struct Time
 	void setYear(int value)
 	{ year_ = value; checkInvariant(); }
 
+	void incSeconds()
+	{
+		if(++sec_ == 60)
+			sec_ = 0;
+	}
 
 	void incMinutes()
 	{
