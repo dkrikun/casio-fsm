@@ -161,6 +161,9 @@ class Watch
 
 	bool shouldAlarm() const
 	{
+		if(!isAlarmSet_)
+			return false;
+
 		const int alarm_duration_sec = 20;
 		return ((time_.month() == alarm_.month()) || alarm_.month() == Time::ANY)
 			&& ((time_.monthday() == alarm_.monthday())
@@ -172,6 +175,9 @@ class Watch
 
 	bool shouldSignalHour() const
 	{
+		if(!isHourlySignalSet_)
+			return false;
+
 		return time_.minutes() == 0 && time_.seconds() <= 1;
 	}
 
