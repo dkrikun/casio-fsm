@@ -62,31 +62,31 @@ void Input::frame()
 
 	if(ch == 'a' || ch == 'A')
 	{
-		watch_->aPressed();
+		watch_->buttonPressed(Watch::A);
 		return;
 	}
 
 	if(ch == 'b' || ch == 'B')
 	{
-		watch_->bPressed();
+		watch_->buttonPressed(Watch::B);
 		return;
 	}	
 
 	if(ch == 'c' || ch == 'C')
 	{
-		watch_->cPressed();
+		watch_->buttonPressed(Watch::C);
 		return;
 	}
 
 	if(ch == 'd' || ch == 'D')
 	{
-		watch_->dPressed();
+		watch_->buttonPressed(Watch::D);
 		return;
 	}	
 
 	if(ch == 'e' || ch == 'E')
 	{
-		watch_->ePressed();
+		watch_->buttonPressed(Watch::E);
 		return;
 	}
 

@@ -19,50 +19,24 @@ class Watch
 
 	public:
 	// events triggered by Input
-	void aPressed()
+	enum Button { A = 0, B,C,D,E };
+
+	void buttonPressed(Button b)
 	{
 		if(shouldSignalCountdown())
 		{
 			cancelSignalCountdown();
 			return;
 		}
-		fsm_.A();
-	}
-	void bPressed()
-	{
-		if(shouldSignalCountdown())
+
+		switch(b)
 		{
-			cancelSignalCountdown();
-			return;
+			case A: fsm_.A(); return;
+			case B: fsm_.B(); return;
+			case C: fsm_.C(); return;
+			case D: fsm_.D(); return;
+			case E: fsm_.E(); return;
 		}
-		fsm_.B();
-	}
-	void cPressed()
-	{
-		if(shouldSignalCountdown())
-		{
-			cancelSignalCountdown();
-			return;
-		}
-		fsm_.C();
-	}
-	void dPressed()
-	{
-		if(shouldSignalCountdown())
-		{
-			cancelSignalCountdown();
-			return;
-		}
-		fsm_.D();
-	}
-	void ePressed()
-	{
-		if(shouldSignalCountdown())
-		{
-			cancelSignalCountdown();
-			return;
-		}
-		fsm_.E();
 	}
 
 	// frame, called by Sched each cycle
