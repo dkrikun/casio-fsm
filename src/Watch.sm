@@ -294,7 +294,12 @@ Default
 		resetReturnTimeout();
 	}
 
-	D		nil		{ resetReturnTimeout(); }
+	D		nil
+	{
+		invertCountdownRepeat();
+		resetReturnTimeout();
+	}
+
 	B		nil		{ resetReturnTimeout(); }
 
 	// return to alarm if no button pressed for 50 sec.

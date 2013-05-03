@@ -168,10 +168,7 @@ class Watch
 	void incCountdownHour() { countdown_.incHour(); }
 
 	void resetCountdown()
-	{
-		std::cout << "reset countdown" << std::endl;
-		countdownCurr_ = countdown_;
-	}
+	{ countdownCurr_ = countdown_; }
 
 	// invoked every frame
 	void decCountdown()
@@ -180,8 +177,6 @@ class Watch
 		wasSignalOn_ = wasSignalOn_ || shouldSignalCountdown();
 		if(wasSignalOn_ && !shouldSignalCountdown())
 		{
-			assert(!isCountdownOn_);
-
 			wasSignalOn_ = false;
 			resetCountdown();
 		}
@@ -199,7 +194,10 @@ class Watch
 		{
 			// timestamp initiates countdown signal
 			countdownSignalTimestamp_ = chr::steady_clock::now();
-			isCountdownOn_ = false;
+			if(isCountdownRepeat_)
+				resetCountdown();
+			else
+				isCountdownOn_ = false;
 		}
 	}
 
@@ -233,7 +231,17 @@ class Watch
 		const chr::seconds delta = chr::duration_cast<chr::seconds>
 			(chr::steady_clock::now() - countdownSignalTimestamp_);
 
-		return delta <= chr::seconds(10);
+		return delta <= chr::seconds(isCountdownRepeat_? 2 : 10);
+	}
+
+	private:
+	bool isCountdownRepeat_;
+
+	public:
+	void invertCountdownRepeat()
+	{
+		cancelSignalCountdown();
+		isCountdownRepeat_ = !isCountdownRepeat_;
 	}
 };
 

@@ -12,6 +12,7 @@ Watch::Watch(bool isDebugFsm, bool isNoCls)
 	, isCountdownOn_(false)
 	, wasSignalOn_(false)
 	, countdownSignalTimestamp_(chr::steady_clock::time_point())
+	, isCountdownRepeat_(false)
 {
 	fsm_.setDebugFlag(isDebugFsm);
 }
@@ -155,7 +156,10 @@ void Watch::display() const
 			}
 			std::cout << ":" << time_.minutes();
 			std::cout << "\t ";
-			std::cout << "    ";
+			if(isCountdownRepeat_)
+				std::cout << " au ";
+			else
+				std::cout << "    ";
 			const Time& to_display = curr_edit_ != NONE?
 				countdown_ : countdownCurr_;
 			maybe_underline(HOUR, to_display.hour());
