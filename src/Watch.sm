@@ -179,7 +179,7 @@ Day
 	Entry	{ setCurrEdit(Watch::MONTHDAY); }
 	Exit	{ setCurrEdit(Watch::NONE); }
 {
-	C				Hour		{ resetReturnTimeout(); }
+	C				Seconds		{ resetReturnTimeout(); }
 
 	E				nil
 	{
