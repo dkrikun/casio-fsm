@@ -1,0 +1,5 @@
+install: ./bootstrap.sh
+script: make
+branches:
+    only:
+        - master
