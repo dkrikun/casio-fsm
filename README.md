@@ -1,6 +1,6 @@
 # casio-fsm
 
-https://travis-ci.org/dkrikun/casio-fsm.png
+[![Build Status](https://travis-ci.org/dkrikun/casio-fsm.png)](https://travis-ci.org/dkrikun/casio-fsm)
 
 Final state-machine implementation for a Casio wrest watch.
 
